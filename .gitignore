@@ -64,5 +64,13 @@ docs/docs/**/*.json*
 *.pkl
 *.tar.gz
 
+# Sensitive files that might contain API keys
+/cache/
+cache/
+/cache/joblib/
+cache/joblib/
+**/gpt3/cached_gpt3_request_v2_wrapped/
+examples/anyscale/
+
 test_before_pypi/
 dspy/.internal_dspyai/dist/
