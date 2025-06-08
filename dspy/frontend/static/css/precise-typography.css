@@ -1,0 +1,306 @@
+/**
+ * DSPy Precise Typography
+ * 
+ * Typography system with Jobs/Ive level obsessiveness about
+ * proportions, spacing, weights, and readability.
+ */
+
+/* ===== TYPEFACE ===== */
+/* Use system fonts to match native platform aesthetics */
+:root {
+  --font-family-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+/* Apply system fonts everywhere */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+code,
+pre,
+.monospace {
+  font-family: var(--font-family-mono);
+}
+
+/* ===== PRECISE TYPE SCALE ===== */
+/* Type scale with perfect proportions - based on Apple's typography */
+:root {
+  --font-size-11: 0.6875rem;    /* 11px */
+  --font-size-12: 0.75rem;      /* 12px */
+  --font-size-13: 0.8125rem;    /* 13px - Small */
+  --font-size-14: 0.875rem;     /* 14px */
+  --font-size-15: 0.9375rem;    /* 15px - Base */
+  --font-size-16: 1rem;         /* 16px */
+  --font-size-17: 1.0625rem;    /* 17px */
+  --font-size-18: 1.125rem;     /* 18px */
+  --font-size-20: 1.25rem;      /* 20px - Subhead */
+  --font-size-22: 1.375rem;     /* 22px */
+  --font-size-24: 1.5rem;       /* 24px - Title 3 */
+  --font-size-26: 1.625rem;     /* 26px */
+  --font-size-28: 1.75rem;      /* 28px - Title 2 */
+  --font-size-30: 1.875rem;     /* 30px */
+  --font-size-34: 2.125rem;     /* 34px - Title 1 */
+  --font-size-40: 2.5rem;       /* 40px - Large Title */
+  
+  /* Precise font weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;  /* Medium is the Apple-like default for headings */
+  --font-weight-semibold: 590; /* Specific semibold weight that Apple uses */
+  --font-weight-bold: 700;
+  
+  /* Line heights - base is 1.2 */
+  --line-height-tight: 1.14;
+  --line-height-normal: 1.2;
+  --line-height-relaxed: 1.375;
+  --line-height-loose: 1.5;
+  
+  /* Letter spacing - subtle adjustments */
+  --letter-spacing-tighter: -0.003em;
+  --letter-spacing-tight: -0.001em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.002em;
+  --letter-spacing-wider: 0.005em;
+}
+
+/* Base body text - San Francisco's default size is 15px */
+body {
+  font-size: var(--font-size-15);
+  line-height: var(--line-height-relaxed);
+  font-weight: var(--font-weight-regular);
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* ===== HEADING STYLES ===== */
+/* Precise heading proportions matching Apple's UI guidelines */
+h1, .h1 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-34);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  color: rgba(0, 0, 0, 0.9);
+  margin-bottom: 0.5em;
+}
+
+h2, .h2 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-28);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  color: rgba(0, 0, 0, 0.9);
+  margin-bottom: 0.5em;
+}
+
+h3, .h3 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.9);
+  margin-bottom: 0.5em;
+}
+
+h4, .h4 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 0.5em;
+}
+
+h5, .h5 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-17);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 0.5em;
+}
+
+h6, .h6 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-15);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.85);
+  margin-bottom: 0.5em;
+}
+
+/* ===== COMPONENT TYPOGRAPHY ===== */
+/* Labels - iOS style */
+label, .label {
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 0.35em;
+  display: block;
+}
+
+/* Navigation links */
+.nav-link {
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.nav-link.active {
+  font-weight: var(--font-weight-semibold);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+/* Buttons - iOS style */
+button, .btn {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* Table headings */
+th {
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.65);
+  text-transform: none;
+}
+
+/* Table data */
+td {
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+  color: rgba(0, 0, 0, 0.85);
+}
+
+/* Code blocks */
+pre, code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* ===== FINE TYPOGRAPHY DETAILS ===== */
+/* Small/Secondary text */
+.text-sm, 
+.text-secondary,
+.secondary-text,
+figcaption {
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-relaxed);
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Large/Display text */
+.text-lg,
+.text-display,
+.hero-text {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-28);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-tight);
+  color: rgba(0, 0, 0, 0.9);
+}
+
+/* Ultra-small system text */
+.text-xs,
+.meta-text {
+  font-size: var(--font-size-11);
+  line-height: var(--line-height-relaxed);
+  color: rgba(0, 0, 0, 0.5);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* ===== PERFECT VERTICAL RHYTHM ===== */
+/* Spacing calibrated to match Apple's baseline grid */
+p, ul, ol, dl {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+p:last-child,
+ul:last-child,
+ol:last-child,
+dl:last-child {
+  margin-bottom: 0;
+}
+
+.content-block + .content-block {
+  margin-top: 1.5em;
+}
+
+/* ===== DARK MODE ADJUSTMENTS ===== */
+@media (prefers-color-scheme: dark) {
+  body {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  h1, .h1, h2, .h2, h3, .h3 {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  h4, .h4, h5, .h5, h6, .h6 {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  label, .label {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .nav-link.active {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  th {
+    color: rgba(255, 255, 255, 0.65);
+  }
+  
+  td {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  .text-sm, 
+  .text-secondary,
+  .secondary-text,
+  figcaption {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .text-lg,
+  .text-display,
+  .hero-text {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .text-xs,
+  .meta-text {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}

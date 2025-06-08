@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Main DSPy API service
+  dspy-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.blueprint
+    image: ${NVIDIA_NGC_REGISTRY:-nvcr.io/your-org}/dspy:latest
+    container_name: dspy-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      # LLM Provider Configuration
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}
+      - NVIDIA_API_BASE=${NVIDIA_API_BASE:-https://api.nvidia.com/v1}
+      - DSPY_LM_PROVIDER=${DSPY_LM_PROVIDER:-nvidia}
+      
+      # SAP HANA Cloud Vector Store Configuration
+      - SAP_HANA_HOST=${SAP_HANA_HOST}
+      - SAP_HANA_PORT=${SAP_HANA_PORT:-443}
+      - SAP_HANA_USER=${SAP_HANA_USER}
+      - SAP_HANA_PASSWORD=${SAP_HANA_PASSWORD}
+      - SAP_HANA_DATABASE=${SAP_HANA_DATABASE:-SYSTEMDB}
+      - SAP_HANA_SCHEMA=${SAP_HANA_SCHEMA:-PUBLIC}
+      - SAP_HANA_TABLE=${SAP_HANA_TABLE:-VECTOR_STORE}
+      - DSPY_VECTOR_STORE=sap_hana
+      
+      # GPU Optimization
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - CUDA_HOME=/usr/local/cuda
+      - DSPY_ENABLE_TENSOR_CORES=1
+      - DSPY_TENSOR_CORE_MODE=auto
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+      
+      # DSPy Configuration
+      - DSPY_CACHE_DIR=/app/data/cache
+      - DSPY_ENABLE_INTERFACE_CHECKS=1
+      - DSPY_BENCHMARKING_ENABLED=1
+      - LOG_LEVEL=INFO
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  models:
+  data:

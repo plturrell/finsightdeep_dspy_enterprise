@@ -1,0 +1,72 @@
+name: dspy-sap-hana
+version: 1.0.0
+description: DSPy API with SAP HANA Cloud Vector Store Integration
+
+services:
+  dspy-api:
+    image: ${NVIDIA_NGC_REGISTRY}/dspy:latest
+    resources:
+      gpu:
+        count: 1
+        type: A10  # Can be adjusted to A100, A10, T4, etc. based on needs
+    ports:
+      - port: 8000
+        target: 8000
+    environment:
+      # LLM Provider Configuration
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}
+      - NVIDIA_API_BASE=${NVIDIA_API_BASE:-https://api.nvidia.com/v1}
+      - DSPY_LM_PROVIDER=nvidia
+      
+      # SAP HANA Cloud Vector Store Configuration
+      - SAP_HANA_HOST=d93a8739-44a8-4845-bef3-8ec724dea2ce.hana.prod-us10.hanacloud.ondemand.com
+      - SAP_HANA_PORT=443
+      - SAP_HANA_USER=DBADMIN
+      - SAP_HANA_PASSWORD=Initial@1
+      - SAP_HANA_DATABASE=SYSTEMDB
+      - SAP_HANA_SCHEMA=PUBLIC
+      - SAP_HANA_TABLE=VECTOR_STORE
+      - DSPY_VECTOR_STORE=sap_hana
+      
+      # GPU Optimization
+      - DSPY_ENABLE_TENSOR_CORES=1
+      - DSPY_TENSOR_CORE_MODE=auto
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+      
+      # Logging Configuration
+      - LOG_LEVEL=INFO
+      - PYTHONUNBUFFERED=1
+    storage:
+      - name: models
+        path: /app/models
+        size: 10Gi
+      - name: data
+        path: /app/data
+        size: 20Gi
+    healthcheck:
+      path: /api/v1/status
+      port: 8000
+      initialDelaySeconds: 30
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 3
+
+observability:
+  monitoring:
+    enabled: true
+  logging:
+    level: INFO
+    retention: 7d
+
+scaling:
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: 80

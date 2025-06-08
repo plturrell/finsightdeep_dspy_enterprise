@@ -1,0 +1,49 @@
+FROM python:3.10-slim
+
+LABEL maintainer="DSPy Team"
+LABEL description="DSPy with Apple-inspired Design (CPU-only for Local Testing)"
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    wget \
+    curl \
+    software-properties-common \
+    build-essential \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY pyproject.toml uv.lock /app/
+
+# Install DSPy in development mode with all extras except GPU-specific dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir uv && \
+    uv sync --all-extras --all-groups
+
+# Copy the source code 
+COPY . /app/
+
+# Install the package in development mode
+RUN pip install -e .
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV LOG_LEVEL=INFO
+ENV PYTHONPATH=/app
+
+# Configure DSPy for interface consistency checks
+ENV DSPY_ENABLE_INTERFACE_CHECKS=1
+
+# Set environment for optimized memory usage
+ENV PYTHONMALLOC=malloc
+ENV MALLOC_TRIM_THRESHOLD_=65536
+
+# Initialize for better startup performance
+RUN python -c "import dspy; print(f'DSPy {dspy.__version__} initialization completed')"
+
+# Default command
+CMD ["python", "-c", "import dspy; print(f'DSPy {dspy.__version__} installed successfully with Apple-inspired design principles')"]

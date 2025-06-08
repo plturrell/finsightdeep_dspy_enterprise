@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSPy - Programming Language Models</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/refined-experience.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/subtle-gradients.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mantine/core@7.1.0/esm/index.css">
+    <link rel="icon" type="image/png" href="{{ url_for('static', path='/img/favicon.png') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <header class="py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="{{ url_for('static', path='/img/logo.png') }}" alt="DSPy Logo" class="h-10 w-auto">
+                    <h1 class="ml-3 text-2xl font-bold text-gray-900">DSPy</h1>
+                </div>
+                <nav>
+                    <ul class="flex space-x-8">
+                        <li><a href="/" class="text-gray-900 font-medium hover:text-indigo-600">Home</a></li>
+                        <li><a href="/dashboard" class="text-gray-500 hover:text-indigo-600">Dashboard</a></li>
+                        <li><a href="/docs" class="text-gray-500 hover:text-indigo-600">API</a></li>
+                        <li><a href="https://dspy.ai" target="_blank" class="text-gray-500 hover:text-indigo-600">Documentation</a></li>
+                        <li><a href="https://github.com/stanfordnlp/dspy" target="_blank" class="text-gray-500 hover:text-indigo-600">GitHub</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <main>
+            <div class="py-12 bg-white rounded-lg shadow-sm mb-8">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Programming—not prompting—Language Models
+                    </h2>
+                    <p class="mt-4 text-xl text-gray-500">
+                        DSPy is the framework for solving AI tasks by writing programs that use language models as subroutines.
+                    </p>
+                    <div class="mt-8 flex justify-center">
+                        <div class="inline-flex rounded-md shadow">
+                            <a href="#demo" class="px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                Try It Out
+                            </a>
+                        </div>
+                        <div class="ml-3 inline-flex">
+                            <a href="/dashboard" class="px-5 py-3 border border-gray-300 text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
+                                View Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Section -->
+            <div id="demo" class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Interactive Demo</h2>
+                
+                <div class="mb-4">
+                    <label for="program-type" class="block text-sm font-medium text-gray-700">Program Type</label>
+                    <select id="program-type" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="chain-of-thought">Chain of Thought</option>
+                        <option value="react">ReAct</option>
+                        <option value="predict">Predict</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="prompt" class="block text-sm font-medium text-gray-700">Your Question or Prompt</label>
+                    <textarea id="prompt" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="What is the capital of France?"></textarea>
+                </div>
+                
+                <div class="flex justify-between mb-6">
+                    <button id="run-btn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Run
+                    </button>
+                    <button id="stream-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Run with Streaming
+                    </button>
+                    <!-- Hidden Easter Egg Button - Revealed after successful interactions -->
+                    <button id="surprise-btn" style="display: none;" class="magical-moment inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-2">
+                        ✨ One More Thing
+                    </button>
+                </div>
+                
+                <div class="border rounded-md p-4 bg-gray-50">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Result</h3>
+                    <div id="result" class="font-mono text-sm whitespace-pre-wrap">Results will appear here...</div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="py-12">
+                <div class="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+                    <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Key Features</h2>
+                    <div class="mt-10">
+                        <dl class="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
+                            <div class="relative">
+                                <dt>
+                                    <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                        </svg>
+                                    </div>
+                                    <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Programmatic Control</p>
+                                </dt>
+                                <dd class="mt-2 ml-16 text-base text-gray-500">
+                                    Write modular AI systems in Python, with LMs as subroutines.
+                                </dd>
+                            </div>
+                            
+                            <div class="relative">
+                                <dt>
+                                    <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Self-Improvement</p>
+                                </dt>
+                                <dd class="mt-2 ml-16 text-base text-gray-500">
+                                    Automatically optimize prompts and weights for high-quality outputs.
+                                </dd>
+                            </div>
+                            
+                            <div class="relative">
+                                <dt>
+                                    <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                        </svg>
+                                    </div>
+                                    <p class="ml-16 text-lg leading-6 font-medium text-gray-900">GPU Optimized</p>
+                                </dt>
+                                <dd class="mt-2 ml-16 text-base text-gray-500">
+                                    Built-in support for GPU acceleration, with specific optimizations for T4 and other architectures.
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="py-8 border-t border-gray-200">
+            <div class="text-center">
+                <p class="text-gray-500 text-sm">
+                    &copy; {% raw %}{{ year }}{% endraw %} Stanford NLP. DSPy is an open-source project.
+                </p>
+                <div class="mt-2">
+                    <a href="https://github.com/stanfordnlp/dspy" target="_blank" class="text-gray-400 hover:text-gray-500">
+                        <span class="sr-only">GitHub</span>
+                        <svg class="h-6 w-6 inline" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', path='/js/refined-experience.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const runBtn = document.getElementById('run-btn');
+            const streamBtn = document.getElementById('stream-btn');
+            const promptInput = document.getElementById('prompt');
+            const programType = document.getElementById('program-type');
+            const resultDiv = document.getElementById('result');
+            
+            // Run prediction
+            runBtn.addEventListener('click', function() {
+                const prompt = promptInput.value.trim();
+                if (!prompt) {
+                    alert('Please enter a prompt');
+                    return;
+                }
+                
+                resultDiv.textContent = 'Loading...';
+                
+                fetch('/api/v1/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        model: programType.value,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    resultDiv.textContent = JSON.stringify(data.result, null, 2);
+                    
+                    // Show surprise button after 2 successful runs
+                    window.successfulRuns = (window.successfulRuns || 0) + 1;
+                    if (window.successfulRuns >= 2) {
+                        const surpriseBtn = document.getElementById('surprise-btn');
+                        surpriseBtn.style.display = 'inline-flex';
+                        
+                        // Add a slight animation to draw attention
+                        setTimeout(() => {
+                            window.createSuccessMoment(surpriseBtn, "You've unlocked a special feature!");
+                        }, 500);
+                    }
+                })
+                .catch(error => {
+                    resultDiv.textContent = 'Error: ' + error.message;
+                    console.error('Error running prediction:', error);
+                });
+            });
+            
+            // Run streaming prediction
+            streamBtn.addEventListener('click', function() {
+                const prompt = promptInput.value.trim();
+                if (!prompt) {
+                    alert('Please enter a prompt');
+                    return;
+                }
+                
+                resultDiv.textContent = 'Streaming...';
+                
+                // Create URL with encoded query parameters
+                const params = new URLSearchParams({
+                    prompt: prompt,
+                    model: programType.value
+                });
+                
+                const eventSource = new EventSource(`/api/v1/predict/stream?${params}`);
+                let resultText = '';
+                
+                eventSource.onmessage = function(event) {
+                    if (event.data === '[DONE]') {
+                        eventSource.close();
+                        return;
+                    }
+                    
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.prediction) {
+                            resultText = JSON.stringify(data.prediction, null, 2);
+                        } else if (data.chunk) {
+                            resultText += data.chunk;
+                        } else if (data.error) {
+                            resultText = 'Error: ' + data.error;
+                        }
+                        resultDiv.textContent = resultText;
+                    } catch (error) {
+                        console.error('Error parsing stream data:', error);
+                    }
+                };
+                
+                eventSource.onerror = function(error) {
+                    console.error('Error with EventSource:', error);
+                    eventSource.close();
+                    resultDiv.textContent = 'Error with streaming. See console for details.';
+                };
+            });
+            
+            // Add surprise button functionality - reveal personal impact
+            const surpriseBtn = document.getElementById('surprise-btn');
+            surpriseBtn.addEventListener('click', function() {
+                // Create personal impact element
+                const demoSection = document.getElementById('demo');
+                
+                // Check if personal impact already exists
+                if (document.querySelector('.personal-impact')) {
+                    return;
+                }
+                
+                const personalImpact = document.createElement('div');
+                personalImpact.className = 'personal-impact bg-white rounded-lg shadow-sm p-8 mb-8 mt-8';
+                personalImpact.innerHTML = `
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Your Personal Impact</h2>
+                    <div class="impact-content">
+                        <div class="impact-story">
+                            <p>Sarah was working on a critical financial analysis project with a tight deadline. Using DSPy's 
+                            conversational AI capabilities, she was able to extract insights from complex data 5x faster than 
+                            traditional methods.</p>
+                            
+                            <div class="impact-quote my-6 pl-4 border-l-4 border-indigo-300 italic">
+                                "I was skeptical that an AI assistant could understand our financial data nuances, 
+                                but the results were incredible. What normally took my team days of analysis was 
+                                completed in hours, giving us time to focus on strategic decisions instead of 
+                                data wrangling."
+                            </div>
+                            <div class="impact-author text-right text-gray-600">
+                                — Sarah K., Financial Analyst
+                            </div>
+                        </div>
+                        
+                        <div class="impact-metrics grid grid-cols-3 gap-4 mt-8">
+                            <div class="impact-metric text-center">
+                                <div class="metric-value text-3xl font-semibold text-indigo-600">82%</div>
+                                <div class="metric-label text-sm uppercase tracking-wider text-gray-500">Time Saved</div>
+                            </div>
+                            <div class="impact-metric text-center">
+                                <div class="metric-value text-3xl font-semibold text-indigo-600">3.7x</div>
+                                <div class="metric-label text-sm uppercase tracking-wider text-gray-500">Productivity</div>
+                            </div>
+                            <div class="impact-metric text-center">
+                                <div class="metric-value text-3xl font-semibold text-indigo-600">94%</div>
+                                <div class="metric-label text-sm uppercase tracking-wider text-gray-500">Accuracy</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Insert after demo section
+                demoSection.parentNode.insertBefore(personalImpact, demoSection.nextSibling);
+                
+                // Add appear animation
+                setTimeout(() => {
+                    personalImpact.classList.add('visible');
+                }, 100);
+                
+                // Scroll to the new section
+                personalImpact.scrollIntoView({ behavior: 'smooth' });
+                
+                // Hide the button after use
+                surpriseBtn.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

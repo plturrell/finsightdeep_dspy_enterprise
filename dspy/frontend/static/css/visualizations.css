@@ -1,0 +1,484 @@
+/**
+ * DSPy Frontend Visualization Styles
+ * Enhanced with design system variables for consistent material design styling
+ */
+
+/* Import variables (this will need to be adjusted based on project structure) */
+@import url('/docs/docs/stylesheets/variables.css');
+
+/* === CHART CONTAINERS === */
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    margin-bottom: var(--spacing-xl);
+    border-radius: var(--border-radius-md);
+    background-color: var(--surface);
+    box-shadow: var(--shadow-1-color);
+    padding: var(--spacing-md);
+    overflow: hidden;
+}
+
+.chart-container.small {
+    height: 200px;
+}
+
+.chart-container.large {
+    height: 400px;
+}
+
+.chart-container .chart-title {
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+.chart-container .chart-subtitle {
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+/* === HEATMAP STYLES === */
+.heatmap-table {
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    width: 100%;
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-1-color);
+}
+
+.heatmap-table td,
+.heatmap-table th {
+    border: 1px solid var(--neutral-300);
+    text-align: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.heatmap-table th {
+    background-color: var(--neutral-200);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-sm);
+}
+
+.heatmap-table td:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: var(--shadow-2-color);
+    position: relative;
+}
+
+/* === PROGRESS BAR STYLES === */
+.progress-container {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xxs);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.progress-bar {
+    background-color: var(--neutral-200);
+    border-radius: var(--border-radius-pill);
+    overflow: hidden;
+    height: 8px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: var(--border-radius-pill);
+    transition: width var(--transition-normal);
+    background-color: var(--primary-color);
+}
+
+.progress-bar-fill.success {
+    background-color: var(--accent-success);
+}
+
+.progress-bar-fill.warning {
+    background-color: var(--accent-warning);
+}
+
+.progress-bar-fill.error {
+    background-color: var(--accent-error);
+}
+
+/* === GAUGE CHART STYLES === */
+.gauge-container {
+    position: relative;
+    height: 200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.gauge-label {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    width: 100%;
+    text-align: center;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+}
+
+.gauge-value {
+    font-size: var(--font-size-xxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+/* === CARD STYLES FOR VISUALIZATION CONTAINERS === */
+.viz-card {
+    background-color: var(--surface);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-1-color);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.viz-card:hover {
+    box-shadow: var(--shadow-2-color);
+    transform: translateY(-2px);
+}
+
+.viz-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--neutral-200);
+}
+
+.viz-card-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.viz-card-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xxs);
+}
+
+.viz-card-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.viz-card-content {
+    padding-top: var(--spacing-xs);
+}
+
+/* === DASHBOARD GRID LAYOUT === */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-grid .col-span-12 {
+    grid-column: span 12 / span 12;
+}
+
+.dashboard-grid .col-span-6 {
+    grid-column: span 6 / span 6;
+}
+
+.dashboard-grid .col-span-4 {
+    grid-column: span 4 / span 4;
+}
+
+.dashboard-grid .col-span-3 {
+    grid-column: span 3 / span 3;
+}
+
+.dashboard-grid .col-span-8 {
+    grid-column: span 8 / span 8;
+}
+
+.dashboard-grid .col-span-9 {
+    grid-column: span 9 / span 9;
+}
+
+/* === METRIC CARD STYLES === */
+.metric-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-lg);
+    background-color: var(--surface);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-1-color);
+    transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.metric-card:hover {
+    box-shadow: var(--shadow-2-color);
+    transform: translateY(-2px);
+}
+
+.metric-card-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.metric-card-value {
+    font-size: var(--font-size-xxxl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+}
+
+.metric-card-trend {
+    display: flex;
+    align-items: center;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+}
+
+.metric-card-trend.positive {
+    color: var(--accent-success);
+}
+
+.metric-card-trend.negative {
+    color: var(--accent-error);
+}
+
+.metric-card-trend-icon {
+    margin-right: var(--spacing-xxs);
+}
+
+/* === ANIMATION FOR TREND INDICATORS === */
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.pulse {
+    animation: pulse 2s infinite ease-in-out;
+}
+
+/* === LEGEND STYLES === */
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: var(--spacing-md);
+    gap: var(--spacing-md);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--border-radius-circle);
+    margin-right: var(--spacing-xs);
+}
+
+/* === TOOLTIP STYLES === */
+.custom-tooltip {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    position: absolute;
+    z-index: var(--z-index-tooltip);
+    max-width: 250px;
+}
+
+.custom-tooltip.visible {
+    opacity: 1;
+}
+
+/* === INTERACTIVE CHART ELEMENTS === */
+.interactive-chart .chart-point {
+    cursor: pointer;
+    transition: r var(--transition-fast);
+}
+
+.interactive-chart .chart-point:hover {
+    r: 8;
+}
+
+/* === DATA TABLE STYLES === */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-1-color);
+}
+
+.data-table th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    background-color: var(--neutral-100);
+    border-bottom: 1px solid var(--neutral-300);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.data-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--neutral-200);
+    color: var(--text-secondary);
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover td {
+    background-color: var(--neutral-100);
+}
+
+/* === PAGINATION === */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+    gap: var(--spacing-xs);
+}
+
+.pagination-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius-sm);
+    background-color: var(--neutral-100);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.pagination-item:hover {
+    background-color: var(--neutral-200);
+}
+
+.pagination-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* === KPI STATUS INDICATORS === */
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--border-radius-circle);
+    margin-right: var(--spacing-xs);
+}
+
+.status-indicator.green {
+    background-color: var(--accent-success);
+}
+
+.status-indicator.yellow {
+    background-color: var(--accent-warning);
+}
+
+.status-indicator.red {
+    background-color: var(--accent-error);
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+@media (max-width: 1024px) {
+    .dashboard-grid .col-span-3,
+    .dashboard-grid .col-span-4 {
+        grid-column: span 6 / span 6;
+    }
+    
+    .viz-card {
+        padding: var(--spacing-sm);
+    }
+    
+    .metric-card {
+        padding: var(--spacing-md);
+    }
+    
+    .metric-card-value {
+        font-size: var(--font-size-xxl);
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-grid .col-span-6,
+    .dashboard-grid .col-span-4,
+    .dashboard-grid .col-span-3,
+    .dashboard-grid .col-span-8,
+    .dashboard-grid .col-span-9 {
+        grid-column: span 12 / span 12;
+    }
+    
+    .chart-container {
+        height: 250px;
+        padding: var(--spacing-sm);
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+}
+
+/* === PRINT STYLES FOR REPORTS === */
+@media print {
+    .chart-container {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        height: 200px;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .dashboard-grid {
+        display: block;
+    }
+    
+    .viz-card {
+        page-break-inside: avoid;
+        margin-bottom: var(--spacing-xl);
+        box-shadow: none;
+        border: 1px solid var(--neutral-300);
+    }
+    
+    .data-table {
+        box-shadow: none;
+        border: 1px solid var(--neutral-300);
+    }
+}

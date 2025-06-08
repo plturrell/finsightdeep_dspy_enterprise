@@ -1,0 +1,294 @@
+/**
+ * DSPy Extreme Minimalism
+ * 
+ * Achieving Jobs/Ive level of interface reduction through
+ * radical simplification and focus on the essence.
+ */
+
+/* ===== EXTREME ELEMENT REDUCTION ===== */
+
+/* Hide all UI elements by default - reveal only through interaction */
+.navigation-item,
+.option-control,
+.supplementary-info,
+.breadcrumb,
+.secondary-action,
+.meta-display,
+.status-indicator:not(.active),
+.version-label,
+.debug-panel,
+.secondary-controls,
+.tertiary-info,
+button:not(.primary-action),
+.sidebar-content > *:not(:first-child),
+.header-details,
+form label,
+.info-text,
+.supplemental,
+.mobile-only-control,
+.assistance-text,
+.details-row td:nth-child(n+3),
+.subtle-indicator,
+.form-guidance,
+.tabs-container,
+.api-indicator,
+thead th:nth-child(n+4),
+tbody td:nth-child(n+4) {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Only show what's absolutely essential */
+.primary-content:hover .header-details,
+.visualization-container:hover .supplemental,
+.primary-action:hover + .secondary-action,
+.data-point:hover .meta-display,
+.form-field:focus-within label,
+.table-container:hover thead th:nth-child(n+4),
+.table-container:hover tbody td:nth-child(n+4),
+.tabs-trigger:hover + .tabs-container {
+  opacity: 1;
+  height: auto;
+  position: relative;
+  pointer-events: auto;
+}
+
+/* Extreme simplification of navigation */
+.nav-item,
+.breadcrumb-item:not(:last-child),
+.tab-item:not(.active),
+.sidebar-nav-item:not(.active) {
+  width: 8px;
+  height: 8px;
+  overflow: hidden;
+  color: transparent;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  margin: 0 4px;
+  padding: 0;
+  display: inline-block;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.nav-item:hover,
+.breadcrumb-item:hover,
+.tab-item:hover,
+.sidebar-nav-item:hover {
+  width: auto;
+  color: rgba(0, 0, 0, 0.7);
+  background-color: transparent;
+  padding: 4px 12px;
+}
+
+.nav-item.active,
+.breadcrumb-item:last-child,
+.tab-item.active,
+.sidebar-nav-item.active {
+  width: auto;
+  color: rgba(0, 0, 0, 0.9);
+  background-color: transparent;
+  padding: 4px 12px;
+}
+
+/* Extreme table simplification */
+table {
+  border: none;
+  background: transparent;
+}
+
+thead {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+  padding: 12px 16px 12px 0;
+  border: none;
+}
+
+/* Only first two columns visible by default */
+th:nth-child(n+3), 
+td:nth-child(n+3) {
+  opacity: 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+table:hover th:nth-child(n+3),
+table:hover td:nth-child(n+3) {
+  opacity: 1;
+  width: auto;
+  padding: 12px 16px;
+  overflow: visible;
+}
+
+/* Card extreme simplification */
+.card {
+  border: none;
+  background: transparent;
+  padding: 0;
+  transition: padding 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card:hover {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.card-body {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: height 0.4s cubic-bezier(0.4, 0.0, 0.2, 1), 
+              opacity 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.card:hover .card-body {
+  height: auto;
+  opacity: 1;
+}
+
+/* Button extreme reduction */
+button, 
+.btn {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.6);
+  padding: 4px 0;
+}
+
+button:hover,
+.btn:hover {
+  color: rgba(0, 0, 0, 0.9);
+  background: transparent;
+}
+
+button.primary-action,
+.btn.primary-action {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+button.primary-action:hover,
+.btn.primary-action:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Form extreme simplification */
+input, 
+textarea, 
+select {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  padding: 8px 0;
+  background: transparent;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  outline: none;
+  box-shadow: none;
+}
+
+/* Eliminate all borders */
+.border,
+.border-t,
+.border-r,
+.border-b,
+.border-l {
+  border: none !important;
+}
+
+/* Eliminate all shadows */
+.shadow,
+.shadow-sm,
+.shadow-md,
+.shadow-lg,
+.shadow-xl {
+  box-shadow: none !important;
+}
+
+/* Eliminate all backgrounds */
+.bg-white,
+.bg-gray-50,
+.bg-gray-100,
+.bg-gray-200 {
+  background: transparent !important;
+}
+
+/* Simplify header */
+header {
+  height: 60px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Essential-only dashboard */
+.dashboard-content > *:not(.primary-visualization) {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s cubic-bezier(0.4, 0.0, 0.2, 1),
+              opacity 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.dashboard-content:hover > *:not(.primary-visualization) {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+/* Eliminate status panels */
+.status-panel {
+  height: 30px;
+  overflow: hidden;
+  transition: height 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.status-panel:hover {
+  height: 200px;
+}
+
+/* Contextual appearance of details */
+.details-expand {
+  height: 30px;
+  overflow: hidden;
+  position: relative;
+  transition: height 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.details-expand::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, white);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.details-expand:hover {
+  height: auto;
+}
+
+.details-expand:hover::after {
+  opacity: 0;
+}

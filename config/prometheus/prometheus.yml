@@ -1,0 +1,61 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'dspy-monitor'
+
+# Scrape rules and configurations
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'dspy-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['dspy-api:8000']
+        labels:
+          service: 'dspy-api'
+
+  - job_name: 'dspy-server'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['dspy-server:8001']
+        labels:
+          service: 'dspy-server'
+          
+  - job_name: 'opentelemetry'
+    static_configs:
+      - targets: ['otel-collector:8888']
+        labels:
+          service: 'otel-collector'
+
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant:6333']
+        labels:
+          service: 'qdrant'
+          
+  - job_name: 'traefik'
+    static_configs:
+      - targets: ['traefik:8080']
+        labels:
+          service: 'traefik'
+
+# Rule files for alerts and recording rules
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093

@@ -1,0 +1,182 @@
+version: '3.8'
+
+services:
+  # Main DSPy API service
+  dspy-api:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Using the GPU-enabled Dockerfile for NVIDIA Blueprint
+    image: dspy-gpu:latest
+    container_name: dspy-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      # LLM Provider Configuration
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY}
+      - NVIDIA_API_BASE=${NVIDIA_API_BASE:-https://api.nvidia.com/v1}
+      - SAP_AI_CORE_API_KEY=${SAP_AI_CORE_API_KEY}
+      - SAP_AI_CORE_URL=${SAP_AI_CORE_URL}
+      - DSPY_LM_PROVIDER=${DSPY_LM_PROVIDER:-nvidia}
+      
+      # SAP HANA Cloud Vector Store Configuration
+      - SAP_HANA_HOST=${SAP_HANA_HOST}
+      - SAP_HANA_PORT=${SAP_HANA_PORT:-443}
+      - SAP_HANA_USER=${SAP_HANA_USER}
+      - SAP_HANA_PASSWORD=${SAP_HANA_PASSWORD}
+      - SAP_HANA_DATABASE=${SAP_HANA_DATABASE}
+      - SAP_HANA_SCHEMA=${SAP_HANA_SCHEMA:-PUBLIC}
+      - SAP_HANA_TABLE=${SAP_HANA_TABLE:-VECTOR_STORE}
+      - DSPY_VECTOR_STORE=sap_hana
+      
+      # GPU Optimization
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - CUDA_HOME=/usr/local/cuda
+      - DSPY_ENABLE_TENSOR_CORES=1
+      - DSPY_TENSOR_CORE_MODE=auto
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+      
+      # DSPy Configuration
+      - DSPY_CACHE_DIR=/app/data/cache
+      - DSPY_ENABLE_INTERFACE_CHECKS=1
+      - DSPY_BENCHMARKING_ENABLED=1
+      - LOG_LEVEL=INFO
+      - PYTHONUNBUFFERED=1
+    command: >
+      python -c "
+      import os
+      import sys
+      import dspy
+      from dspy.utils.benchmarking import enable_benchmarking
+      from dspy.utils.interface_checks import validate_complete_pipeline
+      import logging
+      
+      # Configure logging
+      logging.basicConfig(
+          level=getattr(logging, os.environ.get('LOG_LEVEL', 'INFO')),
+          format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+      )
+      logger = logging.getLogger('dspy-server')
+      
+      # Check if running on NVIDIA GPU
+      try:
+          import torch
+          if torch.cuda.is_available():
+              logger.info(f'CUDA available: {torch.cuda.is_available()}')
+              logger.info(f'CUDA version: {torch.version.cuda}')
+              logger.info(f'GPU count: {torch.cuda.device_count()}')
+              for i in range(torch.cuda.device_count()):
+                  logger.info(f'GPU {i}: {torch.cuda.get_device_name(i)}')
+              
+              # Enable tensor core operations for better performance on compatible GPUs
+              if int(os.environ.get('DSPY_ENABLE_TENSOR_CORES', '0')) > 0:
+                  logger.info('Enabling tensor core operations')
+                  torch.backends.cuda.matmul.allow_tf32 = True
+                  torch.backends.cudnn.allow_tf32 = True
+          else:
+              logger.warning('CUDA is not available. Running in CPU mode.')
+      except ImportError:
+          logger.warning('PyTorch is not installed. GPU acceleration not available.')
+      
+      # Enable benchmarking
+      enable_benchmarking()
+      
+      # Configure SAP HANA vector store integration
+      os.environ['DSPY_VECTOR_STORE'] = os.environ.get('DSPY_VECTOR_STORE', 'sap_hana')
+      
+      # Print configuration
+      logger.info(f'DSPy version: {dspy.__version__}')
+      logger.info(f'LM Provider: {os.environ.get(\"DSPY_LM_PROVIDER\", \"nvidia\")}')
+      logger.info(f'Vector Store: {os.environ.get(\"DSPY_VECTOR_STORE\", \"sap_hana\")}')
+      
+      # Set up SAP HANA vector store connection
+      def setup_sap_hana_connection():
+          try:
+              from hdbcli import dbapi
+              from dspy.retrieve.sap_hana_rm import HanaVectorStore
+              
+              logger.info(f'Connecting to SAP HANA Cloud at {os.environ.get(\"SAP_HANA_HOST\")}:{os.environ.get(\"SAP_HANA_PORT\", \"443\")}')
+              
+              conn = dbapi.connect(
+                  address=os.environ.get('SAP_HANA_HOST'),
+                  port=int(os.environ.get('SAP_HANA_PORT', 443)),
+                  user=os.environ.get('SAP_HANA_USER'),
+                  password=os.environ.get('SAP_HANA_PASSWORD'),
+                  database=os.environ.get('SAP_HANA_DATABASE', 'SYSTEMDB'),
+                  sslValidateCertificate=False
+              )
+              
+              vector_store = HanaVectorStore(
+                  connection=conn,
+                  schema=os.environ.get('SAP_HANA_SCHEMA', 'PUBLIC'),
+                  table=os.environ.get('SAP_HANA_TABLE', 'VECTOR_STORE')
+              )
+              
+              # Register the vector store globally
+              dspy.settings.configure(vector_store=vector_store)
+              logger.info('SAP HANA Cloud vector store connection established successfully')
+              
+              # Test vector store with a simple query
+              try:
+                  import numpy as np
+                  test_vector = np.random.rand(vector_store.dimension).tolist()
+                  logger.info('Testing SAP HANA vector store with a sample query...')
+                  results = vector_store.similarity_search(test_vector, k=1)
+                  logger.info(f'Vector store test successful. Found {len(results)} results.')
+              except Exception as e:
+                  logger.warning(f'Vector store test query failed: {e}')
+          except Exception as e:
+              logger.error(f'Could not connect to SAP HANA Cloud vector store: {e}')
+              logger.warning('Continuing without vector store connection. Some functionality may be limited.')
+      
+      # Try to set up SAP HANA connection but continue even if it fails
+      if os.environ.get('SAP_HANA_HOST'):
+          setup_sap_hana_connection()
+      else:
+          logger.warning('SAP HANA Cloud connection not configured. Skipping vector store initialization.')
+      
+      # Start the server
+      from dspy.frontend.server import start_server
+      from dspy.frontend.config import FrontendConfig
+      
+      config = FrontendConfig(
+          host='0.0.0.0',
+          port=8000,
+          debug=os.environ.get('DEBUG', '0').lower() in ('1', 'true', 'yes'),
+          enable_cors=True,
+          cors_origins=['*'],
+          static_folder='static',
+          template_folder='templates'
+      )
+      
+      logger.info(f'Starting DSPy API server on http://0.0.0.0:8000')
+      
+      try:
+          start_server(config=config)
+      except KeyboardInterrupt:
+          logger.info('Server stopped')
+      except Exception as e:
+          logger.error(f'Error starting server: {e}')
+          sys.exit(1)
+      "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  models:
+  data:
